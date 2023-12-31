@@ -72,13 +72,25 @@ image1.addEventListener("load", function() {
         index = Math.round((col+row)*4)
         return index
     }
+
+    // changes the colour of an individual pixel at an index in image array
+    function changePixelColor(index, r, g, b, a) {
+        scannedData[index] = r;
+        scannedData[index + 1] = g;
+        scannedData[index + 2] = b;
+        scannedData[index + 3] = a;
+    }
     
+    // draws mark on image
     function drawInk(event) { 
         index = convertXYtoIndex(mouse.x, mouse.y)
-        scannedData[index] = 0;
-        scannedData[index + 1] = 0;
-        scannedData[index + 2] = 0;
-        scannedData[index + 3] = 255;
+        changePixelColor(index, 0,0,0,255);
+        for (let coordinate = 0; coordinate < pen.length; coordinate++) {
+            x = mouse.x + pen[coordinate][0]
+            y = mouse.y + pen[coordinate][1]
+            index = convertXYtoIndex(x,y)
+            changePixelColor(index, 0,0,0,255);
+        }
         scannedImage.data = scannedData;
         ctx.putImageData(scannedImage, 0, 0);
     }
