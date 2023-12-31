@@ -14,7 +14,13 @@
             <p id="menu">size</p>
             <input type="number" min="0" max = 800 value="20" oninput="radiusChange()"/>
         </div>
-        <div id="save">
+        <div id="buttonContainer">
+            <button onclick="setPen()">pen</button>
+        </div>
+        <div id="buttonContainer">
+            <button onclick="setEraser()">eraser</button>
+        </div>
+        <div id="buttonContainer">
             <button onclick="save(canvas)">save</button>
         </div>
     </div>

@@ -57,7 +57,16 @@ const mouse = {
     pastY: null,
     state: "up",
     radius: document.querySelector('#radius input').value,
-    pen: makeCirclePen(document.querySelector('#radius input').value)
+    pen: makeCirclePen(document.querySelector('#radius input').value),
+    tool: "pen"
+}
+
+function setPen() {
+    mouse.tool = "pen"
+}
+
+function setEraser() {
+    mouse.tool = "eraser"
 }
 
 function radiusChange() {
@@ -97,14 +106,14 @@ image1.addEventListener("load", function() {
     }
     
     // draws mark on image at specified position
-    function drawInk(event, X, Y) { 
+    function drawInk(event, X, Y, r, g, b, a) { 
         for (let coordinate = 0; coordinate < mouse.pen.length; coordinate++) {
             x = X + mouse.pen[coordinate][0]
             y = Y + mouse.pen[coordinate][1]
             // prevents edge pixels from bleeding onto opposite side of canvas.
             if (x < canvas.width && x > 0) {
             index = convertXYtoIndex(x,y)
-            changePixelColor(index, 0,0,0,255);
+            changePixelColor(index, r,g,b,a);
             }
         }
         scannedImage.data = scannedData;
@@ -216,8 +225,21 @@ image1.addEventListener("load", function() {
         if (mouse.state == "down"){
             getCursorPosition(canvas, event)
             path = bresenhamLine(mouse.pastX, mouse.pastY, mouse.x, mouse.y)
+            if (mouse.tool == "pen") {
+                r = 0;
+                g = 0;
+                b = 0;
+                a = 255;
+            }
+            else {
+                r = 255;
+                g = 255;
+                b = 255;
+                a = 255;
+            }
+
             for (let i = 0; i < path.length; i++) {
-                drawInk(event, path[i][0], path[i][1])
+                drawInk(event, path[i][0], path[i][1], r, g, b, a)
             }
             mouse.pastX = mouse.x
             mouse.pastY = mouse.y
