@@ -59,7 +59,7 @@ image1.addEventListener("load", function() {
 
     // converts cartesian coordinates to an index value.
     function convertXYtoIndex(x, y) {
-        col = Math.round(x)
+        col = Math.round(x) -1
         row = Math.round(y -1)*(canvas.width)
         index = Math.round((col+row)*4)
         return index
@@ -75,16 +75,23 @@ image1.addEventListener("load", function() {
     
     // draws mark on image
     function drawInk(event) { 
-        index = convertXYtoIndex(mouse.x, mouse.y)
-        changePixelColor(index, 0,0,0,255);
         for (let coordinate = 0; coordinate < pen.length; coordinate++) {
             x = mouse.x + pen[coordinate][0]
             y = mouse.y + pen[coordinate][1]
+            // prevents edge pixels from bleeding onto opposite side of canvas.
+            if (x < canvas.width && x > 0) {
             index = convertXYtoIndex(x,y)
             changePixelColor(index, 0,0,0,255);
+            }
         }
         scannedImage.data = scannedData;
         ctx.putImageData(scannedImage, 0, 0);
+    }
+
+    // this is an implementation of bresenham's line algorithm
+    // from https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#
+    function bresenhamLine(x1, y1, x2, y2) {
+
     }
 
     // renders image
