@@ -23,7 +23,8 @@ transform: translate(-50%, -50%);
 }
 
 #menu {
-    color: white;
+    color: black;
+    background-color: white;
 }
 
 input {
