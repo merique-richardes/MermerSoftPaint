@@ -1,5 +1,7 @@
 body {
     background: black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
 }
 
 /*defines the size of the canvas element*/
@@ -13,7 +15,7 @@ height: 450px;
 transform: translate(-50%, -50%);
 }
 
-#radius {
+#tools {
     text-align: center;
     width: 50px;
     top: 25%;
@@ -26,6 +28,20 @@ transform: translate(-50%, -50%);
 }
 
 input {
+    width: 50px;
+}
+
+button {
+    width: 50px;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: center;
+    color: black;
+    background-color: white;
+}
+
+#save {
+    margin: 1em 0px;
     width: 50px;
 }
 

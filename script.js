@@ -15,6 +15,18 @@ image1.src = "./singer_small.png";
 // the below line executes when the png image is finished loading.
 // this allows drawImage to execute after the image is loaded, instead of before.
 
+// saves image from ImageData object
+function save() {
+    // creates an html link tag
+    a = document.createElement('a');
+    // gives link the download attribute (downloads file upon click)
+    a.download = 'painting.png';
+    // sets the href to a URL representing the canvas data.
+    a.href = canvas.toDataURL('image/png')
+    // clicks the href
+    a.click();
+}
+
 // creates an array representing the shape of the pen
 function makeCirclePen(radius) {
     pen = []
@@ -178,7 +190,7 @@ image1.addEventListener("load", function() {
     ctx.drawImage(image1, 0, 0, image1.width, image1.height);
     // creates an array of values representing the RGBA values of each pixel
     // from top to bottom, left to right.
-    // in format [R, G, B, A, R2, G2, B2, A2, R3... 
+    // in format [R, G, B, A, R1, G1, B1, A1, R2... 
     const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const scannedData = scannedImage.data;
     // prints the array to inspect element console

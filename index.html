@@ -9,9 +9,14 @@
 </head>
 <body>
     <canvas id="canvas1"></canvas>
-    <div id="radius">
-        <p id="menu">size</p>
-        <input type="number" min="0" max = 800 value="20" oninput="radiusChange()"/>
+    <div id="tools">
+        <div id="radius">
+            <p id="menu">size</p>
+            <input type="number" min="0" max = 800 value="20" oninput="radiusChange()"/>
+        </div>
+        <div id="save">
+            <button onclick="save(canvas)">save</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
