@@ -13,25 +13,19 @@ const image1 = new Image()
 image1.src = "./singer_small.png";
 // the below line executes when the png image is finished loading.
 // this allows drawImage to execute after the image is loaded, instead of before.
+
+// creates mouse object
+const mouse = {
+    x: null,
+    y: null,
+    // these store the previous values of x and y to apply line alogrithms.
+    Pastx: null,
+    Pasty: null,
+    state: "up",
+    radius: 10
+}
+
 image1.addEventListener("load", function() {
-    // renders image
-    ctx.drawImage(image1, 0, 0, image1.width, image1.height);
-    // creates an array of values representing the RGBA values of each pixel
-    // from top to bottom, left to right.
-    // in format [R, G, B, A, R2, G2, B2, A2, R3... 
-    const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const scannedData = scannedImage.data;
-    // prints the array to inspect element console
-    console.log(scannedImage);
-
-    // creates mouse dictionary with x y coordinates as well as a radius
-    const mouse = {
-        x: null,
-        y: null,
-        state: "up",
-        radius: 3
-    }
-
     // creates an array representing the shape of the pen
     function makeCirclePen(radius) {
         pen = []
@@ -52,9 +46,6 @@ image1.addEventListener("load", function() {
         return pen
     }
 
-    pen = makeCirclePen(mouse.radius);
-    console.log(pen)
-
     // adapted from https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
     function getCursorPosition(canvas, event) {
         // gets the bounding rectangle of the canvas
@@ -66,6 +57,7 @@ image1.addEventListener("load", function() {
         console.log(canvasRectangle.left, canvasRectangle.top, event.pageX, event.pageY, mouse.x, mouse.y);
     }
 
+    // converts cartesian coordinates to an index value.
     function convertXYtoIndex(x, y) {
         col = Math.round(x)
         row = Math.round(y -1)*(canvas.width)
@@ -94,6 +86,19 @@ image1.addEventListener("load", function() {
         scannedImage.data = scannedData;
         ctx.putImageData(scannedImage, 0, 0);
     }
+
+    // renders image
+    ctx.drawImage(image1, 0, 0, image1.width, image1.height);
+    // creates an array of values representing the RGBA values of each pixel
+    // from top to bottom, left to right.
+    // in format [R, G, B, A, R2, G2, B2, A2, R3... 
+    const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const scannedData = scannedImage.data;
+    // prints the array to inspect element console
+    console.log(scannedImage);
+
+    pen = makeCirclePen(mouse.radius);
+    console.log(pen)
 
     // keeps track of the mouse state
     window.addEventListener('mousedown', function(event) {
