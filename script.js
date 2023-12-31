@@ -1,9 +1,8 @@
 // creates variable representing the canvas using the id that was assigned by us
 const canvas = document.getElementById('canvas1');
-
-// creates an instance of CanvasRenderingContext2D object
-// allows default 2d canvas methods to be used.
+// creates an instance of CanvasRenderingContext2D, allowing methods to be used.
 const ctx = canvas.getContext('2d');
+const colorPicker = document.getElementById('colorPicker');
 // sets canvas size, needs to be same size as in the css styling.
 // it is reccommended that the size be updated automatically in the future.
 canvas.width = 800;
@@ -12,8 +11,6 @@ canvas.height = 450;
 const image1 = new Image()
 // adds path of sample image to image object
 image1.src = "./singer_small.png";
-// the below line executes when the png image is finished loading.
-// this allows drawImage to execute after the image is loaded, instead of before.
 
 // saves image from ImageData object
 function save() {
@@ -58,7 +55,8 @@ const mouse = {
     state: "up",
     radius: document.querySelector('#radius input').value,
     pen: makeCirclePen(document.querySelector('#radius input').value),
-    tool: "pen"
+    tool: "pen",
+    color: {r: 0, g: 0, b: 0, a: 255}
 }
 
 function setPen() {
@@ -75,7 +73,48 @@ function radiusChange() {
     console.log("changed! ", mouse.radius)
 }
 
-// a circle rendering algorithm of my own design
+function HextoDec(hex) {
+    hexToDecTable = {
+        '0':0,
+        '1':1,
+        '2':2,
+        '3':3,
+        '4':4,
+        '5':5,
+        '6':6,
+        '7':7,
+        '8':8,
+        '9':9,
+        'a':10,
+        'b':11,
+        'c':12,
+        'd':13,
+        'e':14,
+        'f':15
+    }
+    dec = 0
+    //start at 
+    for (let i = 0; i < hex.length; i++) {
+        unitDecimalValue = hexToDecTable[hex[i]] // get decimal value, left to right
+        dec += unitDecimalValue*(16**(hex.length - i - 1))
+    }
+    return dec
+}
+
+function colorChange() {
+    var hex = document.querySelector('#colorPickerContainer input').value
+    console.log("changed to: ", hex)
+    // gets string of hex values for each colour channel
+    r = hex[1].concat(hex[2])
+    g = hex[3].concat(hex[4])
+    b = hex[5].concat(hex[6])
+    mouse.color.r = HextoDec(r)
+    mouse.color.g = HextoDec(g)
+    mouse.color.b = HextoDec(b)
+}
+
+// the below line executes when the png image is finished loading.
+// this allows drawImage to execute after the image is loaded, instead of before.
 image1.addEventListener("load", function() {
 
     // adapted from https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
@@ -226,9 +265,9 @@ image1.addEventListener("load", function() {
             getCursorPosition(canvas, event)
             path = bresenhamLine(mouse.pastX, mouse.pastY, mouse.x, mouse.y)
             if (mouse.tool == "pen") {
-                r = 0;
-                g = 0;
-                b = 0;
+                r = mouse.color.r;
+                g = mouse.color.g;
+                b = mouse.color.b;
                 a = 255;
             }
             else {

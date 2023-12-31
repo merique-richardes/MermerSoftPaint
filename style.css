@@ -45,6 +45,16 @@ button {
     width: 60px;
 }
 
+#colorPickerContainer {
+    margin: 1em 0px;
+    width: 60px;
+}
+
+#colorPicker {
+    color: white;
+    background-color: white;
+}
+
 
 canvas:hover {
 cursor: crosshair;
