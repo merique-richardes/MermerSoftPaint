@@ -6,7 +6,7 @@ const ctx = canvas.getContext('2d');
 // sets canvas size, needs to be same size as in the css styling.
 // it is reccommended that the size be updated automatically in the future.
 canvas.width = 800;
-canvas.height = 400;
+canvas.height = 450;
 // constructs image object
 const image1 = new Image()
 // adds path of sample image to image object
@@ -37,16 +37,21 @@ image1.addEventListener("load", function() {
         // gets the bounding rectangle of the canvas
         const canvasRectangle = canvas.getBoundingClientRect();
         // calculates the x/y coordinates relative to the canvas' coordinates
-        mouse.x = event.x - canvasRectangle.left;
-        mouse.y = event.y - canvasRectangle.top;
+        mouse.x = event.pageX - canvasRectangle.left;
+        mouse.y = event.pageY - canvasRectangle.top;
         // prints to console
-        console.log(mouse.x, mouse.y);
+        console.log(canvasRectangle.left, canvasRectangle.top, event.pageX, event.pageY, mouse.x, mouse.y);
+    }
+
+    function convertXYtoIndex(x, y) {
+        col = Math.round(x)
+        row = Math.round(y -1)*(canvas.width)
+        index = Math.round((col+row)*4)
+        return index
     }
 
     function drawInk(event) { 
-        col = Math.round(mouse.x)
-        row = Math.round(mouse.y)*canvas.width -1
-        index = (col+row)*4
+        index = convertXYtoIndex(mouse.x, mouse.y)
         scannedData[index] = 0;
         scannedData[index + 1] = 0;
         scannedData[index + 2] = 0;
@@ -74,13 +79,3 @@ image1.addEventListener("load", function() {
     })
 
 });
-
-
-// gets the mouse position as x and y values
-/*
-window.addEventListener('mousemove', function(event) {
-    mouse.x = event.x;
-    mouse.y = event.y;
-    console.log(mouse.x, mouse.y);
-});
-*/
