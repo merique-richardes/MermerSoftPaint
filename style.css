@@ -12,3 +12,7 @@ width: 800px;
 height: 450px;
 transform: translate(-50%, -50%);
 }
+
+canvas:hover {
+cursor: crosshair;
+}
