@@ -28,9 +28,32 @@ image1.addEventListener("load", function() {
     const mouse = {
         x: null,
         y: null,
-        state: "up"
-        //radius: 20
+        state: "up",
+        radius: 3
     }
+
+    // creates an array representing the shape of the pen
+    function makeCirclePen(radius) {
+        pen = []
+        // loops through every element in a matrix of size m*n 
+        // to check if the pixel is contained in the circle
+        // if it does, the coordinate is added to the array.
+        for (let m = 0; m < radius*2 + 1; m++) {
+            for (let n = 0; n < radius*2 + 1; n++) {
+                // center circle in the middle of array
+                x = m - radius
+                y = n - radius
+                if (Math.sqrt(x**2 + y**2) <= radius) {
+                    coordinate = [x,y]
+                    pen.push(coordinate)
+                }
+            }
+        }
+        return pen
+    }
+
+    pen = makeCirclePen(mouse.radius);
+    console.log(pen)
 
     // adapted from https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
     function getCursorPosition(canvas, event) {
@@ -49,7 +72,7 @@ image1.addEventListener("load", function() {
         index = Math.round((col+row)*4)
         return index
     }
-
+    
     function drawInk(event) { 
         index = convertXYtoIndex(mouse.x, mouse.y)
         scannedData[index] = 0;
