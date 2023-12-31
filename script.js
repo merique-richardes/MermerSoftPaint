@@ -1,5 +1,6 @@
 // creates variable representing the canvas using the id that was assigned by us
 const canvas = document.getElementById('canvas1');
+
 // creates an instance of CanvasRenderingContext2D object
 // allows default 2d canvas methods to be used.
 const ctx = canvas.getContext('2d');
@@ -14,6 +15,27 @@ image1.src = "./singer_small.png";
 // the below line executes when the png image is finished loading.
 // this allows drawImage to execute after the image is loaded, instead of before.
 
+// creates an array representing the shape of the pen
+function makeCirclePen(radius) {
+    pen = []
+    // loops through every element in a matrix of size m*n 
+    // to check if the pixel is contained in the circle
+    // if it does, the coordinate is added to the array.
+    for (let m = 0; m < radius*2 + 1; m++) {
+        for (let n = 0; n < radius*2 + 1; n++) {
+            // center circle in the middle of array
+            x = m - radius
+            y = n - radius
+            if (Math.sqrt(x**2 + y**2) <= radius) {
+                coordinate = [x,y]
+                pen.push(coordinate)
+            }
+        }
+    }
+    console.log(pen)
+    return pen
+}
+
 // creates mouse object
 const mouse = {
     x: null,
@@ -22,30 +44,18 @@ const mouse = {
     pastX: null,
     pastY: null,
     state: "up",
-    radius: 10
+    radius: document.querySelector('#radius input').value,
+    pen: makeCirclePen(document.querySelector('#radius input').value)
+}
+
+function radiusChange() {
+    mouse.radius = document.querySelector('#radius input').value
+    mouse.pen = makeCirclePen(mouse.radius)
+    console.log("changed! ", mouse.radius)
 }
 
 // a circle rendering algorithm of my own design
 image1.addEventListener("load", function() {
-    // creates an array representing the shape of the pen
-    function makeCirclePen(radius) {
-        pen = []
-        // loops through every element in a matrix of size m*n 
-        // to check if the pixel is contained in the circle
-        // if it does, the coordinate is added to the array.
-        for (let m = 0; m < radius*2 + 1; m++) {
-            for (let n = 0; n < radius*2 + 1; n++) {
-                // center circle in the middle of array
-                x = m - radius
-                y = n - radius
-                if (Math.sqrt(x**2 + y**2) <= radius) {
-                    coordinate = [x,y]
-                    pen.push(coordinate)
-                }
-            }
-        }
-        return pen
-    }
 
     // adapted from https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
     function getCursorPosition(canvas, event) {
@@ -76,9 +86,9 @@ image1.addEventListener("load", function() {
     
     // draws mark on image at specified position
     function drawInk(event, X, Y) { 
-        for (let coordinate = 0; coordinate < pen.length; coordinate++) {
-            x = X + pen[coordinate][0]
-            y = Y + pen[coordinate][1]
+        for (let coordinate = 0; coordinate < mouse.pen.length; coordinate++) {
+            x = X + mouse.pen[coordinate][0]
+            y = Y + mouse.pen[coordinate][1]
             // prevents edge pixels from bleeding onto opposite side of canvas.
             if (x < canvas.width && x > 0) {
             index = convertXYtoIndex(x,y)
@@ -173,9 +183,7 @@ image1.addEventListener("load", function() {
     const scannedData = scannedImage.data;
     // prints the array to inspect element console
     console.log(scannedImage);
-
-    pen = makeCirclePen(mouse.radius);
-    console.log(pen)
+    console.log(mouse.pen)
 
     // keeps track of the mouse state
     window.addEventListener('mousedown', function(event) {
