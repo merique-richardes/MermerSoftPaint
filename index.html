@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+    <!--standard metadata for an html document-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MermerSoftPaint</title>
+    <!--link css stylesheet-->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="canvas1"></canvas>
+    <div id="tools">
+        <div id="radius">
+            <p id="menu">size</p>
+            <input type="number" min="0" max = 800 value="20" oninput="radiusChange()"/>
+        </div>
+        <div id="colorPickerContainer">
+            <input id="colorPicker" type="color" value="#000000" oninput="colorChange()">
+        </div>
+        <div id="buttonContainer">
+            <button onclick="setPen()">pen</button>
+        </div>
+        <div id="buttonContainer">
+            <button onclick="setEraser()">eraser</button>
+        </div>
+        <div id="buttonContainer">
+            <button onclick="save(canvas)">save</button>
+        </div>
+        <div id="buttonContainer">
+            <button onclick="newCanvas()">new</button>
+        </div>
+        <div id="buttonContainer">
+            <button onclick="undo()">undo</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>

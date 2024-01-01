@@ -1,0 +1,61 @@
+body {
+    background: gray;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+/*defines the size of the canvas element*/
+#canvas1 {
+top: 50%;
+left: 50%;
+position: absolute;
+width: 800px;
+height: 450px;
+transform: translate(-50%, -50%);
+}
+
+#tools {
+    text-align: center;
+    width: 50px;
+    top: 20%;
+    left: 20px;
+    position: absolute;
+}
+
+#menu {
+    color: black;
+    background-color: white;
+}
+
+input {
+    width: 50px;
+}
+
+button {
+    width: 60px;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: center;
+    color: black;
+    background-color: white;
+}
+
+#buttonContainer {
+    margin: 1em 0px;
+    width: 60px;
+}
+
+#colorPickerContainer {
+    margin: 1em 0px;
+    width: 60px;
+}
+
+#colorPicker {
+    color: white;
+    background-color: white;
+}
+
+
+canvas:hover {
+cursor: crosshair;
+}
