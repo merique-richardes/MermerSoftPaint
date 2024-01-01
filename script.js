@@ -36,6 +36,7 @@ function history() {
     arrayClone = new Uint8ClampedArray(scannedImage.data);
     tmp = new ImageData(arrayClone, canvas.width, canvas.height)
     versionHistory.push(tmp)
+    console.log("history recorded!")
     // prevents the version history buffer from growing too large
     if (versionHistory.length > versionHistoryLen) {
         versionHistory.shift()
@@ -44,19 +45,13 @@ function history() {
 }
 
 function newCanvas() {
-    image1.src = "./empty.png"
-    loaded = false
-    image1.addEventListener("load", function() {
-        ctx.drawImage(image1, 0, 0, image1.width, image1.height);
-        // creates an array of values representing the RGBA values of each pixel
-        // from top to bottom, left to right.
-        // in format [R, G, B, A, R1, G1, B1, A1, R2... 
-        scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        scannedData = scannedImage.data;
-        loaded == true;
-        history()
-    })
-
+    history() // save last canvas
+    for (let i = 0; i < scannedData.length; i++) {
+    scannedData[i] = 255;
+    }
+    scannedImage.data=scannedData;
+    ctx.putImageData(scannedImage, 0, 0);
+    console.log("new canvas!")
 }
 
 // creates an array representing the shape of the pen
@@ -295,6 +290,8 @@ image1.addEventListener("load", function() {
     // prints the array to inspect element console
     console.log(scannedImage);
     console.log(mouse.pen)
+    // save initial state
+    history()
 
     // keeps track of the mouse state
     canvas.addEventListener('mousedown', function(event) {
