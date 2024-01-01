@@ -1,5 +1,5 @@
 # MermerSoftPaint
-#### Video Demo:  https://youtube.com/...
+#### Video Demo:  https://youtu.be/Y0FsKhbVylI?si=Gn5r77TJZCUFVWm2
 #### Description:
 #### MermerSoftPaint is a bitmap painting webapp made using JavaScript. I decided to make it because me and my friends like to create art using deprecated painting softwares. I thought it would be fun imitate our beloved drawing tools myself. This project was made with the intention of teaching myself javascript, CLI git, and to fullfill the final project requirements of the cs50x Harvard OpenCourseWare. In the future, I would like to turn MermerSoftPaint into a usable, lightweight painting software.
 ## Design Choices:
