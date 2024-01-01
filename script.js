@@ -12,6 +12,13 @@ const image1 = new Image()
 // adds path of sample image to image object
 image1.src = "./singer_small.png";
 
+// initialize global image data variables
+var scannedImage = new ImageData(canvas.width, canvas.height);
+var scannedData = [];
+// added for ctrl + z support up to 30 times
+const versionHistoryLen = 30;
+var versionHistory = [];
+
 // saves image from ImageData object
 function save() {
     // creates an html link tag
@@ -22,6 +29,34 @@ function save() {
     a.href = canvas.toDataURL('image/png')
     // clicks the href
     a.click();
+}
+
+function history() {
+    // saves a copy of the current version to version history
+    arrayClone = new Uint8ClampedArray(scannedImage.data);
+    tmp = new ImageData(arrayClone, canvas.width, canvas.height)
+    versionHistory.push(tmp)
+    // prevents the version history buffer from growing too large
+    if (versionHistory.length > versionHistoryLen) {
+        versionHistory.shift()
+        console.log("shifted!")
+    }
+}
+
+function newCanvas() {
+    image1.src = "./empty.png"
+    loaded = false
+    image1.addEventListener("load", function() {
+        ctx.drawImage(image1, 0, 0, image1.width, image1.height);
+        // creates an array of values representing the RGBA values of each pixel
+        // from top to bottom, left to right.
+        // in format [R, G, B, A, R1, G1, B1, A1, R2... 
+        scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        scannedData = scannedImage.data;
+        loaded == true;
+        history()
+    })
+
 }
 
 // creates an array representing the shape of the pen
@@ -113,6 +148,22 @@ function colorChange() {
     mouse.color.b = HextoDec(b)
 }
 
+function undo() {
+    if (versionHistory.length > 0) {
+    scannedImage = new ImageData((versionHistory.pop()).data, canvas.width, canvas.height);
+    ctx.putImageData(scannedImage, 0, 0);
+    scannedData = scannedImage.data;
+    console.log("undo! ", scannedImage.data)
+    }
+}
+// listens for ctrl + z, detection code from 
+// https://stackoverflow.com/questions/16006583/capturing-ctrlz-key-combination-in-javascript
+document.addEventListener('keydown', function(event) {
+    // checks if both keys have been pressed
+    if (event.ctrlKey && event.key === 'z') {
+        undo()
+    }
+    });
 // the below line executes when the png image is finished loading.
 // this allows drawImage to execute after the image is loaded, instead of before.
 image1.addEventListener("load", function() {
@@ -239,19 +290,20 @@ image1.addEventListener("load", function() {
     // creates an array of values representing the RGBA values of each pixel
     // from top to bottom, left to right.
     // in format [R, G, B, A, R1, G1, B1, A1, R2... 
-    const scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const scannedData = scannedImage.data;
+    scannedImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    scannedData = scannedImage.data;
     // prints the array to inspect element console
     console.log(scannedImage);
     console.log(mouse.pen)
 
     // keeps track of the mouse state
-    window.addEventListener('mousedown', function(event) {
+    canvas.addEventListener('mousedown', function(event) {
         getCursorPosition(canvas, event)
         mouse.state = "down"
         // initialize past x and y
         mouse.pastX = mouse.x
         mouse.pastY = mouse.y
+        history();
         console.log(mouse.state)
     })
     window.addEventListener('mouseup', function(event) {
@@ -264,13 +316,13 @@ image1.addEventListener("load", function() {
         if (mouse.state == "down"){
             getCursorPosition(canvas, event)
             path = bresenhamLine(mouse.pastX, mouse.pastY, mouse.x, mouse.y)
-            if (mouse.tool == "pen") {
+            if (mouse.tool == "pen") { // pen
                 r = mouse.color.r;
                 g = mouse.color.g;
                 b = mouse.color.b;
                 a = 255;
             }
-            else {
+            else { // eraser
                 r = 255;
                 g = 255;
                 b = 255;
@@ -284,5 +336,5 @@ image1.addEventListener("load", function() {
             mouse.pastY = mouse.y
         }
     })
-
+    
 });
